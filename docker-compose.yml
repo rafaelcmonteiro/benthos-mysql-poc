@@ -1,5 +1,10 @@
 version: "3"
 services:
+  app:
+    image: golang
+    container_name: 'golang'
+    networks:
+      - poc-benthos
   # Broker
   rabbitmq:
     image: rabbitmq:3-management-alpine
