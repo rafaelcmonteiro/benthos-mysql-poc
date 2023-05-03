@@ -1,6 +1,7 @@
 Simple sequence diagram about this poc:
 
-> :WARNING: **IF THE DIAGRAM DIDIN'T LOAD**: upgrade your browser or change it to another(Tested in Chrome and Firefox)
+> **Warning**  
+> **IF THE DIAGRAM DIDIN'T LOAD**: upgrade your browser or change it to another(Tested in Chrome and Firefox)
 
 ```mermaid
 sequenceDiagram;
