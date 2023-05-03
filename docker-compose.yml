@@ -1,0 +1,42 @@
+version: "3"
+services:
+  # Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    depends_on:
+      - mysql
+    networks:
+      - poc-benthos
+  # CDC or ETL data engineer tool
+  benthos:
+    image: jeffail/benthos
+    container_name: 'benthos'
+    volumes:
+      - ./benthos.yml:/benthos.yml
+    ports:
+      - 4195:4195
+    networks:
+      - poc-benthos 
+  # Data source, for benthos.
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: 'mysql'
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_ROOT_PASSWORD: 'pass'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - poc-benthos
+networks:
+  poc-benthos:
+    driver: bridge

@@ -1,0 +1,1 @@
+cat -T kern.log | cut -d' ' -f6-10
