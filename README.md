@@ -1,5 +1,7 @@
 Simple sequence diagram about this poc:
 
+> :WARNING: **IF THE DIAGRAM DIDIN'T LOAD**: upgrade your browser or change it to another(Tested in Chrome and Firefox)
+
 ```mermaid
 sequenceDiagram;
     dummy_data->>+mysql: generate real time data;
