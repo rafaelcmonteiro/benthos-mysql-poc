@@ -47,6 +47,16 @@ services:
       - '3306'
     networks:
       - poc-benthos
+  postgres:
+    image: postgres
+    restart: always
+    container_name: 'postgres'
+    environment:
+      POSTGRES_DB: 'db'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'pass'
+    networks:
+      - poc-benthos 
 networks:
   poc-benthos:
     driver: bridge
