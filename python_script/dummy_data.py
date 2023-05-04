@@ -1,32 +1,36 @@
+#!/bin/env python
 import pymysql.cursors
+from essential_generators import DocumentGenerator
 import time
 
 connection = pymysql.connect(
-    host='localhost',
+    host='mysql',
     user='user',
     password='pass',
     database='db',
     cursorclass=pymysql.cursors.DictCursor
 )
 
+# Getting current time.
 current_time = time.ctime()
-print(current_time)
 
+# Generate Phrase for dummy data load.
+gen = DocumentGenerator()
+sentence = gen.sentence()
 
+with connection:
+    with connection.cursor() as cursor:
+        # Create a new record
+        sql = "INSERT INTO `kern_log` (`time`, `kernel_info`) VALUES (%s, %s)"
+        cursor.execute(sql, (current_time, sentence))
 
-# with connection:
-#     with connection.cursor() as cursor:
-#         # Create a new record
-#         sql = "INSERT INTO `kern_log` (`date_time`, `kernel_info`) VALUES (%s, %s)"
-#         cursor.execute(sql, ('03-05-2023', 'DUMMY INFORMATION ABOUT KERNEL'))
+    # connection is not autocommit by default. So you must commit to save
+    # your changes.
+    connection.commit()
 
-#     # connection is not autocommit by default. So you must commit to save
-#     # your changes.
-#     connection.commit()
-
-#     with connection.cursor() as cursor:
-#         # Read a single record
-#         sql = "SELECT `date_time`, `kernel_info` FROM `kern_log` WHERE `date_time`=%s"
-#         cursor.execute(sql, ('03-05-2023',))
-#         result = cursor.fetchone()
-#         print(result)
+    with connection.cursor() as cursor:
+        # Read a single record
+        sql = "SELECT `id`, `time`, `kernel_info` FROM `kern_log`"
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        print(result)
