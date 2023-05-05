@@ -1,15 +1,43 @@
+logger:
+  level: ALL
+
+http:
+  enabled: true
+  root_path: /benthos
+  debug_endpoints: true
+
 input:
   label: ""
   sql_select:
     driver: "mysql"
-    dsn: "user:pass@tcp(localhost:3306)/db"
+    dsn: user:pass@tcp(mysql:3306)/db
     table: "kern_log"
-    columns: [ '*' ]
-    where: ""
-    args_mapping: ""
+    columns: [time, kernel_info]
+    args_mapping: |
+      root = [
+        this.time,
+        this.kernel_info
+      ]
 
 pipeline:
-  processors: []
+  processors:
+  - sql_insert:
+    driver: postgres
+    dsn: postgres://user:pass@postgres:5532/db?sslmode=disable
+    table: "kern_log"
+    collumns: [time, kernel_info]
+    args_mapping: |
+      root = [
+        this.time,
+        this.kernel_info
+      ]
+    init_statement: |
+      CREATE TABLE IF NOT EXISTS kern_log (
+        time varchar(100),
+        kernel_info varchar(200)
+      );
 
 output:
-  stdout: {}s
+  label: "output_Stdout_orders"
+  stdout:
+    codec: lines

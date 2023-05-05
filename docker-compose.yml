@@ -27,6 +27,11 @@ services:
       - ./benthos_config/benthos.yml:/benthos.yml
     ports:
       - 4195:4195
+      - 4190:4190
+    depends_on:
+      - postgres
+      - mysql
+      - app
     networks:
       - poc-benthos 
   # Data source, for benthos.
